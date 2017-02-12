@@ -1,7 +1,27 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+
+        classpath 'org.figurate:gradle-keytool-plugin:1.0.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.3.0'
+        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
+}
+
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
+    maven { url  "http://dl.bintray.com/piasy/maven" }
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'android-apt'
-apply from: "https://raw.githubusercontent.com/Piasy/BintrayUploadScript/master/bintray.gradle"
 
 apt {
     arguments {
@@ -16,8 +36,6 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.releaseVersionCode
-        versionName rootProject.ext.releaseVersionName
 
         externalNativeBuild {
             cmake {
@@ -65,8 +83,8 @@ dependencies {
 
     compile 'org.greenrobot:eventbus:3.0.0'
 
-    compile('com.tbruyelle.rxpermissions2:rxpermissions:0.8.2') {
+    compile('com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar') {
         exclude module: 'rxjava'
     }
-    compile 'io.reactivex.rxjava2:rxjava:2.0.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
 }

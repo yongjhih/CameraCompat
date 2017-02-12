@@ -129,7 +129,7 @@ abstract class PreviewFragment extends Fragment {
         super.onResume();
 
         disposePermissionRequest();
-        mPermissionRequest = RxPermissions.getInstance(getContext())
+        mPermissionRequest = new RxPermissions(getActivity())
                 .request(Manifest.permission.CAMERA)
                 .subscribe(grant -> {
                     if (grant && CheckUtil.nonNull(mCameraHelper)) {
