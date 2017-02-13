@@ -1,0 +1,23 @@
+apply plugin: 'com.novoda.bintray-release'
+
+def getRepositoryUsername() {
+    return hasProperty('BINTRAY_USER') ? BINTRAY_USER : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('BINTRAY_KEY') ? BINTRAY_KEY : ""
+}
+
+apply from: 'git-version.gradle'
+
+publish {
+    userOrg = 'yongjhih'
+    groupId = 'com.github.yongjhih'
+    artifactId = 'CameraCompat'
+    publishVersion = readVersionName()
+    desc = 'Create a camera preview app with beautify and camera api compatibility!'
+    website = 'https://github.com/yongjhih/CameraCompat'
+    bintrayUser = getRepositoryUsername()
+    bintrayKey = getRepositoryPassword()
+    dryRun = false
+}

@@ -101,7 +101,7 @@ public final class CameraCompat {
     }
 
     /**
-     * can't be called from {@link com.github.piasy.cameracompat.compat.PreviewFragment},
+     * can't be called from com.github.piasy.cameracompat.compat.PreviewFragment,
      * otherwise recreate will have race condition
      */
     public static void reset() {
@@ -202,7 +202,7 @@ public final class CameraCompat {
     /**
      * Video will have the specified width, but the height will be trimmed.
      *
-     * width > height
+     * width &gt; height
      */
     public interface VideoCaptureCallback {
         /**

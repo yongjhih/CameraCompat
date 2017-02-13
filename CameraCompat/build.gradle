@@ -5,10 +5,12 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
 
-        classpath 'org.figurate:gradle-keytool-plugin:1.0.0'
         classpath 'me.tatarka:gradle-retrolambda:3.3.0'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+
+        classpath 'com.novoda:bintray-release:0.4.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
     configurations.classpath.exclude group: 'com.android.tools.external.lombok'
 }
@@ -88,3 +90,7 @@ dependencies {
     }
     compile 'io.reactivex.rxjava2:rxjava:2.0.1'
 }
+
+apply from: 'javadoc.gradle'
+apply plugin: 'com.github.dcendents.android-maven'
+apply from: 'bintray.gradle'
