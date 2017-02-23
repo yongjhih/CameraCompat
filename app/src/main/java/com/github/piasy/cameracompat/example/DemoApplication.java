@@ -26,6 +26,7 @@ package com.github.piasy.cameracompat.example;
 
 import android.app.Application;
 import com.squareup.leakcanary.LeakCanary;
+import com.github.piasy.cameracompat.CameraCompat;
 
 /**
  * Created by Piasy{github.com/Piasy} on 04/11/2016.
@@ -40,5 +41,7 @@ public class DemoApplication extends Application {
             return;
         }
         LeakCanary.install(this);
+
+        CameraCompat.init(getApplicationContext());
     }
 }

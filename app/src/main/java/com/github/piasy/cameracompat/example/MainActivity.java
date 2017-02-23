@@ -36,9 +36,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CameraCompat.init(getApplicationContext());
-
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
     }
 

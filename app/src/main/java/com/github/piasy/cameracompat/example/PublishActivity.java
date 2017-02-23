@@ -59,11 +59,12 @@ public class PublishActivity extends AppCompatActivity implements CameraCompat.V
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AutoBundle.bind(this);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_publish);
+
+        AutoBundle.bind(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
-        setContentView(R.layout.activity_publish);
         ButterKnife.bind(this);
 
         if (!mBeautifyCapable) {
