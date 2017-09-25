@@ -25,10 +25,16 @@
 package com.github.piasy.cameracompat.compat;
 
 import android.annotation.TargetApi;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.github.piasy.cameracompat.CameraCompat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import jp.co.cyberagent.android.gpuimage.Rotation;
 
@@ -51,10 +57,20 @@ class Camera1Helper extends CameraHelper {
         try {
             mCamera = openCamera();
             Camera.Parameters parameters = mCamera.getParameters();
-            if (parameters.getSupportedFocusModes()
-                    .contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+            List<String> modes = parameters.getSupportedFocusModes();
+            String focusMode = findSettableValue(modes,
+                    Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
+                    Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+            if (focusMode == null) {
+                focusMode = findSettableValue(modes,
+                        Camera.Parameters.FOCUS_MODE_AUTO,
+                        Camera.Parameters.FOCUS_MODE_MACRO,
+                        Camera.Parameters.FOCUS_MODE_EDOF);
             }
+            if (focusMode != null) {
+                parameters.setFocusMode(focusMode);
+            }
+            setFocusArea(parameters);
             PreviewSize previewSize = findOptSize(mPreviewWidth, mPreviewHeight);
             parameters.setPreviewSize(previewSize.getWidth(), previewSize.getHeight());
             mCamera.setParameters(parameters);
@@ -67,6 +83,20 @@ class Camera1Helper extends CameraHelper {
             return false;
         }
         return true;
+    }
+
+    private static final int AREA_PER_1000 = 400;
+
+    public static void setFocusArea(@NonNull Camera.Parameters parameters) {
+        if (parameters.getMaxNumFocusAreas() > 0) {
+            List<Camera.Area> middleArea = buildMiddleArea(AREA_PER_1000);
+            parameters.setFocusAreas(middleArea);
+        }
+    }
+
+    public static List<Camera.Area> buildMiddleArea(int areaPer1000) {
+        return Collections.singletonList(
+                new Camera.Area(new Rect(-areaPer1000, -areaPer1000, areaPer1000, areaPer1000), 1));
     }
 
     @Override
@@ -140,5 +170,18 @@ class Camera1Helper extends CameraHelper {
     interface CameraController {
         void onOpened(final Camera camera, final Rotation rotation, final boolean flipHorizontal,
                 final boolean flipVertical);
+    }
+
+    @Nullable
+    private static String findSettableValue(@NonNull Collection<String> supportedValues,
+                                            String... desiredValues) {
+        String result = null;
+        for (String desiredValue : desiredValues) {
+            if (supportedValues.contains(desiredValue)) {
+                result = desiredValue;
+                break;
+            }
+        }
+        return result;
     }
 }
